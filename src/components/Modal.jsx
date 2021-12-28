@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CerrarBtn from '../img/cerrar.svg';
 import Mensaje from './Mensaje';
 import { generarId } from '../helpers';
 
-const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto, gastos}) => {
+const Modal = ({
+    setModal, 
+    animarModal, 
+    setAnimarModal, 
+    guardarGasto, 
+    gastos,
+    setGastoEditar,
+    gastoEditar}) => {
     const [ gasto, setGasto ] = useState({
         'nombre':'',
         'monto': 0,
@@ -35,22 +42,40 @@ const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto, gastos}) =>
                 return;
             }
         }
-        guardarGasto([...gastos, gasto])
-        setGasto({
-            'nombre':'',
-            'monto': 0,
-            'categoria': '',
-            'fecha': Date.now(),
-            'id': generarId()
-        });
+        if(gasto.isEdit){
+            //Eliminamos la marca, eliminamos el atributo marca, reemplazamos dentro de gastos
+            delete gasto.isEdit;
+            let tempGasto = [...gastos].map( gastoGuardado => gastoGuardado.id === gasto.id ? gasto : gastoGuardado);
+            guardarGasto(tempGasto);
+        } else{
+            guardarGasto([...gastos, gasto])
+            setGasto({
+                'nombre':'',
+                'monto': 0,
+                'categoria': '',
+                'fecha': Date.now(),
+                'id': generarId()
+            });
+        }
+
         ocultarModal();
     }
     const ocultarModal = () => {
         setAnimarModal(false)
         setTimeout(() => {
             setModal(false);
+            setGastoEditar({});
         },500)
     }
+    useEffect(() => {
+        //Marcamos el objeto como un editado
+        if(Object.keys(gastoEditar).length){
+            setGasto({
+                ...gastoEditar,
+                'isEdit': true
+            });  
+        }
+    },[])
     return ( 
         <div className="modal">
             <div className="cerrar-modal">
@@ -61,7 +86,7 @@ const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto, gastos}) =>
                 />
             </div>
             <form className={`formulario ${animarModal ? 'animar' : 'cerrar'}`}>
-                <legend>Nuevo Gasto</legend>
+                <legend>{gastoEditar.nombre ? 'Editar gasto' : 'Nuevo Gasto'}</legend>
                 {mensaje && <Mensaje tipo="error">{mensaje}</Mensaje>}
                 <div className='campo'>
                     <label htmlFor="nombre">Nombre gasto</label>
@@ -103,7 +128,7 @@ const Modal = ({setModal, animarModal, setAnimarModal, guardarGasto, gastos}) =>
                 </div>
                 <input 
                 type="submit" 
-                value="Añadir gasto"
+                value={gastoEditar.nombre ? 'Guardar cambios' : 'Añadir gasto'}
                 onClick={ (e) => handleSubmit(e)}
                 />
             </form>

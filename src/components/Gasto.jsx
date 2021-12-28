@@ -8,18 +8,21 @@ import {
  } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
 
-const Gasto = ({gasto}) => {
+const Gasto = ({gasto, setGastoEditar, eliminarGasto}) => {
 
     const leadingActions =  ( 
         <LeadingActions>
-            <SwipeAction onClick={() => {console.log('lalala')}}>
+            <SwipeAction onClick={() => {setGastoEditar(gasto)}}>
                 Editar
             </SwipeAction>
         </LeadingActions>
     );
     const trailingActions = (
         <TrailingActions>
-            <SwipeAction onClick={() => {console.log('lalala')}}>
+            <SwipeAction 
+                onClick={() => {eliminarGasto(gasto.id)}}
+                destructive={true}
+            >
                 Eliminar
             </SwipeAction>
         </TrailingActions>
