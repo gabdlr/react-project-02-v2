@@ -17,7 +17,9 @@ function App() {
   const [ gastosFiltrados, setGastosFiltrados ] = useState([]);
 
   const handleNuevoGasto = () => {
-    setModal(true);
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      setModal(true);
     setTimeout(()=>{
       setAnimarModal(true)
     }, 100)
