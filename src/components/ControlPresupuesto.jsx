@@ -31,14 +31,14 @@ const ControlPresupuesto = ({
     const handleResetApp = () => {
         const resultado = confirm("¿Deseas reiniciar la app?");
         if(resultado){
-            setGastos(0);
+            setGastos([]);
             setPresupuesto(0);
             setIsValidPresupuesto(false);
         }
     }
     return ( 
         <div className="contenedor-presupuesto contenedor sombra dos-columnas">
-            <div>
+            <div className="progressbar">
                 <CircularProgressbar
                     value={porcentaje}
                     styles={buildStyles({

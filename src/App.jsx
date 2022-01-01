@@ -83,7 +83,7 @@ function App() {
             filtro={filtro}
             setFiltro={setFiltro}
           />
-          <ListadoGastos
+         <ListadoGastos
             gastos={gastos}
             setGastoEditar={setGastoEditar}
             eliminarGasto={eliminarGasto}
