@@ -484,6 +484,7 @@ main {
     color: var(--blanco);
 }
 body .modal {
+    height: 100vh;
     overflow: hidden;
 }
 
